@@ -3,8 +3,7 @@ from flask_cors import CORS
 from textblob import TextBlob
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
-
+CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route('/analyze_sentiment', methods=['POST'])
 def analyze_sentiment():
     data = request.get_json()
