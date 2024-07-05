@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sentiment Analysis for Mental Health</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 50%;
+            margin: 0 auto;
+            text-align: center;
+            padding: 50px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sentiment Analysis for Mental Health</h1>
+        <textarea id="textInput" placeholder="Enter text here..."></textarea><br>
+        <button onclick="analyzeSentiment()">Analyze Sentiment</button>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        function analyzeSentiment() {
+            const text = document.getElementById('textInput').value;
+            fetch('https://sentiment-server.onrender.com/analyze_sentiment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = `Sentiment: ${data.sentiment.toFixed(2)}<br>Mood: ${data.mood}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
