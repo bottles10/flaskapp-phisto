@@ -5,8 +5,16 @@ from textblob import TextBlob
 app = Flask(__name__)
 CORS(app, resources={r"/analyze_sentiment": {"origins": "https://bottles10.github.io"}})
 
-@app.route('/analyze_sentiment', methods=['POST'])
+@app.route('/analyze_sentiment', methods=['OPTIONS', 'POST'])
 def analyze_sentiment():
+    if request.method == 'OPTIONS':
+        # CORS preflight request
+        response = jsonify({'status': 'OK'})
+        response.headers.add('Access-Control-Allow-Origin', 'https://bottles10.github.io')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+        return response
+
     data = request.get_json()
     text = data.get('text')
     blob = TextBlob(text)
@@ -17,7 +25,10 @@ def analyze_sentiment():
         mood = "Negative"
     else:
         mood = "Neutral"
-    return jsonify({"sentiment": sentiment, "mood": mood})
+
+    response = jsonify({"sentiment": sentiment, "mood": mood})
+    response.headers.add('Access-Control-Allow-Origin', 'https://bottles10.github.io')
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True)
