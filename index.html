@@ -36,7 +36,7 @@
     <script>
         function analyzeSentiment() {
             const text = document.getElementById('textInput').value;
-            fetch('https://sentiment-server.onrender.com/analyze_sentiment', {
+            fetch('https://flaskapp-phisto.onrender.com/analyze_sentiment', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
